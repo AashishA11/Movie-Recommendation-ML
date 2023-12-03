@@ -54,25 +54,25 @@ def get_suggestions():
     data = pd.read_csv('main_data.csv')
     return list(data['movie_title'].str.capitalize())
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 
 @app.route("/")
 @app.route("/home")
 def home():
     suggestions = get_suggestions()
-    return render_template('home.html',suggestions=suggestions)
+    return render_template('home.html', suggestions=suggestions)
 
-@app.route("/similarity",methods=["POST"])
+@app.route("/similarity", methods=["POST"])
 def similarity():
     movie = request.form['name']
     rc = rcmd(movie)
-    if type(rc)==type('string'):
+    if type(rc) == type('string'):
         return rc
     else:
-        m_str="---".join(rc)
+        m_str = "---".join(rc)
         return m_str
 
-@app.route("/recommend",methods=["POST"])
+@app.route("/recommend", methods=["POST"])
 def recommend():
     # getting data from AJAX request
     title = request.form['title']
